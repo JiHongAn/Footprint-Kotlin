@@ -1,5 +1,6 @@
 package com.project.footprint.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,26 +8,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.footprint.R
 import com.project.footprint.model.Travel
+import com.project.footprint.view.detail.DetailActivity
 import kotlinx.android.synthetic.main.item_travel.view.*
 import kotlin.math.roundToInt
 
 class TravelAdapter(private val items: ArrayList<Travel>) :
     RecyclerView.Adapter<TravelAdapter.ViewHolder>() {
 
-    interface ItemClick {
-        fun onClick(view: View, position: Int)
-    }
-
-    var itemClick: ItemClick? = null
-
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        val listener = View.OnClickListener { v ->
-            if (itemClick != null) {
-                itemClick?.onClick(v, position)
-            }
+        val listener = View.OnClickListener {
+            var intent = Intent(it.context, DetailActivity::class.java)
+
+            // intent를 넘겨준다
+            intent.putExtra("title", item.title)
+            intent.putExtra("contentId", item.contentId)
+            intent.putExtra("firstImage", item.firstImage)
+            intent.putExtra("mapX", item.mapX)
+            intent.putExtra("mapY", item.mapY)
+            it.context.startActivity(intent)
         }
 
         holder.apply {

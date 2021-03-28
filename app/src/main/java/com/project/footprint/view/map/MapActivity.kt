@@ -1,5 +1,6 @@
 package com.project.footprint.view.map
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.project.footprint.R
 import com.project.footprint.model.Travel
+import com.project.footprint.view.detail.DetailActivity
 import kotlinx.android.synthetic.main.activity_map.*
 import kotlinx.android.synthetic.main.item_travel.view.*
 
@@ -115,6 +117,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                         Glide.with(this)
                             .load(firstImage)
                             .into(item_travel.img_thumbnail)
+
+                        // 클릭 이벤트
+                        item_travel.setOnClickListener {
+                            var intent = Intent(it.context, DetailActivity::class.java)
+
+                            // intent를 넘겨준다
+                            intent.putExtra("title", item.title)
+                            intent.putExtra("contentId", item.contentId)
+                            intent.putExtra("firstImage", item.firstImage)
+                            intent.putExtra("mapX", item.mapX)
+                            intent.putExtra("mapY", item.mapY)
+                            it.context.startActivity(intent)
+                        }
                         break
                     }
                 }
