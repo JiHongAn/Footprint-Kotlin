@@ -3,6 +3,7 @@ package com.project.footprint.view.detail_map
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,6 +30,10 @@ class DetailMapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_map)
+
+        // 뒤로가기 버튼 추가
+        val toolbar = supportActionBar!!
+        toolbar.setDisplayHomeAsUpEnabled(true)
 
         // title
         title = intent.getStringExtra("title").toString()
@@ -78,5 +83,17 @@ class DetailMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // 마커 추가
         mMap.addMarker(markerOptions)
+    }
+
+    // 툴바 버튼 추가
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            // 뒤로가기 버튼 클릭시
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

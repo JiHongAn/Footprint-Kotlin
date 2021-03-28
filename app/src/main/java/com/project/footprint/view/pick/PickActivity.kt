@@ -2,6 +2,7 @@ package com.project.footprint.view.pick
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -19,6 +20,10 @@ class PickActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pick)
+
+        // 뒤로가기 버튼 추가
+        val toolbar = supportActionBar!!
+        toolbar.setDisplayHomeAsUpEnabled(true)
 
         // 지도
         val mapFragment = supportFragmentManager
@@ -61,5 +66,17 @@ class PickActivity : AppCompatActivity(), OnMapReadyCallback {
         // camera 이동
         val camera = LatLng(mapY!!.toDouble(), mapX!!.toDouble())
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(camera, 14F))
+    }
+
+    // 툴바 버튼 추가
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            // 뒤로가기 버튼 클릭시
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

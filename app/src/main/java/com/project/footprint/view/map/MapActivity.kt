@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -37,6 +38,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_map)
 
         mapViewModel = ViewModelProvider(this).get(MapViewModel::class.java)
+
+        // 뒤로가기 버튼 추가
+        val toolbar = supportActionBar!!
+        toolbar.setDisplayHomeAsUpEnabled(true)
 
         // 지도
         val mapFragment = supportFragmentManager
@@ -135,6 +140,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 true
             }
+        }
+    }
+
+    // 툴바 버튼 추가
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            // 뒤로가기 버튼 클릭시
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }
