@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.project.footprint.R
 import com.project.footprint.adapter.TravelAdapter
+import com.project.footprint.view.map.MapActivity
 import com.project.footprint.view.pick.PickActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -30,6 +31,12 @@ class MainActivity : AppCompatActivity() {
         // 내 위치 바꾸기
         layout_search.setOnClickListener {
             val intent = Intent(this, PickActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 지도로 이동하기
+        fab.setOnClickListener {
+            var intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
         }
     }
