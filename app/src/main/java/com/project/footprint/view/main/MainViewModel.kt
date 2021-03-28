@@ -47,6 +47,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     // 여행지 데이터를 가져온다
     private fun jsonParse(url: String) {
+        list.clear()
+
         val request =
             JsonArrayRequest(Request.Method.GET, url, null, { response ->
                 try {

@@ -52,4 +52,7 @@ dependencies {
     // 이미지 파싱을 위한 Glide
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+
+    // 지도
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }

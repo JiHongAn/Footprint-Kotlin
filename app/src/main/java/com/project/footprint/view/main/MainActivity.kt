@@ -1,5 +1,7 @@
 package com.project.footprint.view.main
 
+import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -9,9 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.project.footprint.R
 import com.project.footprint.adapter.TravelAdapter
+import com.project.footprint.view.pick.PickActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.Exception
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,20 +24,26 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        // liveData
-        mainViewModel._currentArrayList.observe(this, Observer {
-            progress.visibility = View.GONE
-            var adapter = TravelAdapter(it)
-            recyclerview.adapter = adapter
-        })
-
         // recyclerview 스크롤
         recyclerview.isNestedScrollingEnabled = false
 
+        // 내 위치 바꾸기
+        layout_search.setOnClickListener {
+            val intent = Intent(this, PickActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    // on Resume
+    override fun onResume() {
+        super.onResume()
+
         // 저장된 프리퍼런스 가져오기
-        val pref = this.getPreferences(0)
-        var mapX = pref.getString("mapX", "")
-        var mapY = pref.getString("mapY", "")
+        val preferences: SharedPreferences =
+            getSharedPreferences("com.project.footprint", MODE_PRIVATE)
+
+        var mapX = preferences.getString("mapX", "")
+        var mapY = preferences.getString("mapY", "")
 
         // 만약 저장된 좌표가 없다면
         if (mapX.equals("") || mapY.equals("")) {
@@ -64,5 +71,12 @@ class MainActivity : AppCompatActivity() {
 
         // 좌표 주변 여행지 불러오기
         mainViewModel.getLocation(mapX, mapY)
+
+        // liveData
+        mainViewModel._currentArrayList.observe(this, Observer {
+            progress.visibility = View.GONE
+            var adapter = TravelAdapter(it)
+            recyclerview.adapter = adapter
+        })
     }
 }
