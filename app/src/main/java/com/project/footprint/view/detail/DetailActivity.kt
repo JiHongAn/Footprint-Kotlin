@@ -1,5 +1,6 @@
 package com.project.footprint.view.detail
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.project.footprint.R
+import com.project.footprint.view.detail_map.DetailMapActivity
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -32,6 +34,9 @@ class DetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // content Id
     private var contentId = ""
+
+    var mapX = 0.0
+    var mapY = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +51,17 @@ class DetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // 초기 설정
         settingIntent()
+
+        // 크게보기 버튼 클릭시
+        button_bigger.setOnClickListener {
+            var intent = Intent(it.context, DetailMapActivity::class.java)
+
+            // intent를 넘겨준다
+            intent.putExtra("title", title)
+            intent.putExtra("mapX", mapX.toString())
+            intent.putExtra("mapY", mapY.toString())
+            it.context.startActivity(intent)
+        }
 
         // 툴바 설정
         setToolbar()
@@ -80,6 +96,12 @@ class DetailActivity : AppCompatActivity(), OnMapReadyCallback {
         // 여행지 id
         contentId = intent.getStringExtra("contentId").toString()
 
+        // mapX
+        mapX = intent.getStringExtra("mapX")!!.toDouble()
+
+        // mapY
+        mapY = intent.getStringExtra("mapY")!!.toDouble()
+
         // firstImage
         var firstImage = intent.getStringExtra("firstImage").toString()
 
@@ -89,12 +111,6 @@ class DetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // 지도
     override fun onMapReady(googleMap: GoogleMap) {
-        // mapX
-        var mapX = intent.getStringExtra("mapX")!!.toDouble()
-
-        // mapY
-        var mapY = intent.getStringExtra("mapY")!!.toDouble()
-
         mMap = googleMap
 
         val camera = LatLng(mapY, mapX)

@@ -37,5 +37,9 @@
             android:name=".view.detail.DetailActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Footprint.NoActionBar" />
+
+        <activity
+            android:name=".view.detail_map.DetailMapActivity"
+            android:label="@string/app_name" />
     </application>
 </manifest>
