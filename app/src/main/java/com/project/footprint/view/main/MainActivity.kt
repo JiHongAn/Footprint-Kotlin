@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.project.footprint.R
 import com.project.footprint.adapter.TravelAdapter
+import com.project.footprint.helper.GetLocation
 import com.project.footprint.view.map.MapActivity
 import com.project.footprint.view.pick.PickActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,10 +29,25 @@ class MainActivity : AppCompatActivity() {
         // recyclerview 스크롤
         recyclerview.isNestedScrollingEnabled = false
 
+        // liveData
+        mainViewModel._currentArrayList.observe(this, Observer {
+            recyclerview.visibility = View.VISIBLE
+            progress.visibility = View.GONE
+            var adapter = TravelAdapter(it)
+            recyclerview.adapter = adapter
+        })
+
         // 내 위치 바꾸기
         layout_search.setOnClickListener {
             val intent = Intent(this, PickActivity::class.java)
             startActivity(intent)
+        }
+
+        // 내 위치 찾기
+        layout_my_location.setOnClickListener {
+            // 내 위치 가져오기
+            GetLocation(this, this).getCurrentLoc()
+            setData()
         }
 
         // 지도로 이동하기
@@ -44,6 +60,13 @@ class MainActivity : AppCompatActivity() {
     // on Resume
     override fun onResume() {
         super.onResume()
+        setData()
+    }
+
+    // setData
+    private fun setData() {
+        recyclerview.visibility = View.GONE
+        progress.visibility = View.VISIBLE
 
         // 저장된 프리퍼런스 가져오기
         val preferences: SharedPreferences =
@@ -78,12 +101,5 @@ class MainActivity : AppCompatActivity() {
 
         // 좌표 주변 여행지 불러오기
         mainViewModel.getLocation(mapX, mapY)
-
-        // liveData
-        mainViewModel._currentArrayList.observe(this, Observer {
-            progress.visibility = View.GONE
-            var adapter = TravelAdapter(it)
-            recyclerview.adapter = adapter
-        })
     }
 }
